@@ -1,11 +1,14 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import cors from 'cors'; // ✅ Add this
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+app.use(cors()); // ✅ Allow all origins (you can restrict this later if needed)
 
 app.get('/api/player/:tag', async (req, res) => {
   const tag = encodeURIComponent(req.params.tag);
@@ -23,9 +26,4 @@ app.get('/api/player/:tag', async (req, res) => {
   res.json(data);
 });
 
-// 👇 Add this route at the end so the root URL gives a friendly message
-app.get('/', (req, res) => {
-  res.send('🚀 Donation Tracker Backend is Running!');
-});
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Donation Tracker Backend is Running on port ${PORT}`));
