@@ -19,8 +19,8 @@ app.get('/api/player/:tag', async (req, res) => {
   
   const response = await fetch(`https://api.clashofclans.com/v1/players/${tag}`, {
     headers: {
-      Authorization: process.env.COC_TOKEN  // ✅ Right here
-    }
+  Authorization: `Bearer ${process.env.COC_TOKEN}`  // ✅ This is correct
+}
   });
 
   if (!response.ok) {
