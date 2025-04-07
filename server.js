@@ -1,25 +1,32 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import cors from 'cors'; // ✅ Add this
+import cors from 'cors'; // 🛡️ CORS protection
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors()); // ✅ Allow all origins (you can restrict this later if needed)
+app.use(cors()); // ✅ Enable CORS for all origins
+
+app.get('/', (req, res) => {
+  res.send("✅ Backend is running");
+});
 
 app.get('/api/player/:tag', async (req, res) => {
   const tag = encodeURIComponent(req.params.tag);
+  
   const response = await fetch(`https://api.clashofclans.com/v1/players/${tag}`, {
     headers: {
-      Authorization: `Bearer ${process.env.COC_TOKEN}`
+      Authorization: process.env.COC_TOKEN  // ✅ Right here
     }
   });
 
   if (!response.ok) {
-    return res.status(response.status).json({ error: 'Failed to fetch player data' });
+    const errorText = await response.text();
+    console.error("COC API Error:", errorText);
+    return res.status(response.status).json({ error: 'Failed to fetch player data', details: errorText });
   }
 
   const data = await response.json();
