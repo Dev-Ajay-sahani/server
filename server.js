@@ -23,4 +23,9 @@ app.get('/api/player/:tag', async (req, res) => {
   res.json(data);
 });
 
+// 👇 Add this route at the end so the root URL gives a friendly message
+app.get('/', (req, res) => {
+  res.send('🚀 Donation Tracker Backend is Running!');
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
